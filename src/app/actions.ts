@@ -39,7 +39,7 @@ const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema, H
 export async function generatePlan(prevState: any, formData: FormData): Promise<any> {
     const rawData = {
         destination: formData.get('destination'),
-        queryType: formData.get('queryType'),
+        queryType: formData.get('trainQueryType') || formData.get('queryType'),
         date: formData.get('date'),
     };
     

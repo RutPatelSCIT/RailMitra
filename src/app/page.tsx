@@ -163,6 +163,8 @@ export default function Home() {
     }
   }
 
+  const isTrainSubQuery = ['train_info', 'pnr_status', 'train_status'].includes(queryType);
+
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="p-4 border-b">
@@ -186,9 +188,14 @@ export default function Home() {
              <RadioGroup
                 name="queryType"
                 defaultValue="full_trip"
+                value={queryType}
                 onValueChange={(value) => {
-                    setQueryType(value);
-                    if (['full_trip', 'hotel_info', 'pnr_status', 'train_status'].includes(value)) {
+                    if (!['train_info', 'pnr_status', 'train_status'].includes(value)) {
+                       setQueryType(value);
+                    } else if (value === 'train_info' && !isTrainSubQuery) {
+                       setQueryType('train_info')
+                    }
+                    if (['full_trip', 'hotel_info'].includes(value) || value === 'pnr_status' || value === 'train_status') {
                         setDate(undefined);
                     }
                 }}
@@ -198,10 +205,18 @@ export default function Home() {
                   <RadioGroupItem value="full_trip" id="full_trip" />
                   Full Trip
                 </Label>
-                <Label htmlFor="train_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
-                  <RadioGroupItem value="train_info" id="train_info" />
-                  Train Info
-                </Label>
+                
+                <div className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                    <RadioGroupItem 
+                        value="train_info" 
+                        id="train_main" 
+                        checked={isTrainSubQuery}
+                        onClick={() => setQueryType('train_info')}
+                     />
+                    <label htmlFor="train_main">Train</label>
+                </div>
+
+
                  <Label htmlFor="flight_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
                   <RadioGroupItem value="flight_info" id="flight_info" />
                   Flight Info
@@ -210,15 +225,35 @@ export default function Home() {
                   <RadioGroupItem value="hotel_info" id="hotel_info" />
                   Hotel Info
                 </Label>
-                <Label htmlFor="pnr_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
-                  <RadioGroupItem value="pnr_status" id="pnr_status" />
-                  PNR Status
-                </Label>
-                <Label htmlFor="train_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
-                  <RadioGroupItem value="train_status" id="train_status" />
-                  Train Status
-                </Label>
               </RadioGroup>
+
+              {isTrainSubQuery && (
+                <RadioGroup
+                    name="trainQueryType"
+                    value={queryType}
+                    onValueChange={(value) => {
+                        setQueryType(value)
+                        if (['pnr_status', 'train_status'].includes(value)) {
+                            setDate(undefined);
+                        }
+                    }}
+                    className="flex flex-wrap justify-center gap-2 md:gap-4 mt-4"
+                >
+                    <Label htmlFor="train_info_sub" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary text-sm">
+                        <RadioGroupItem value="train_info" id="train_info_sub" />
+                        Search Trains
+                    </Label>
+                    <Label htmlFor="pnr_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary text-sm">
+                        <RadioGroupItem value="pnr_status" id="pnr_status" />
+                        PNR Status
+                    </Label>
+                    <Label htmlFor="train_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary text-sm">
+                        <RadioGroupItem value="train_status" id="train_status" />
+                        Live Train Status
+                    </Label>
+                </RadioGroup>
+              )}
+
 
             <div className="flex items-start gap-2">
                 <div className="relative flex-grow">
