@@ -1,6 +1,7 @@
 'use server';
 import { travelPlannerFlow } from '@/ai/flows/travelPlanner';
 import { transportationFlow } from '@/ai/flows/transportationFlow';
+import { hotelFlow } from '@/ai/flows/hotelFlow';
 import { z } from 'zod';
 
 const TravelPlanInputSchema = z.object({
@@ -14,7 +15,12 @@ const TransportationInputSchema = z.object({
     date: z.string().optional(),
 });
 
-const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema]);
+const HotelInputSchema = z.object({
+    destination: z.string().min(1, "Destination cannot be empty."),
+    queryType: z.literal("hotel_info"),
+});
+
+const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema, HotelInputSchema]);
 
 
 export async function generatePlan(prevState: any, formData: FormData): Promise<any> {
@@ -39,7 +45,11 @@ export async function generatePlan(prevState: any, formData: FormData): Promise<
         if (validation.data.queryType === 'full_trip') {
             const results = await travelPlannerFlow({ query: destination });
             return { plan: results, planType: 'trip' };
-        } else {
+        } else if (validation.data.queryType === 'hotel_info') {
+            const results = await hotelFlow({ query: destination });
+            return { plan: results, planType: 'hotel' };
+        }
+        else {
              const { date } = validation.data;
              const results = await transportationFlow({ query: destination, queryType, date });
              return { plan: results, planType: 'transport', date: date };

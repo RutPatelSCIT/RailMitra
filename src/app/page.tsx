@@ -15,11 +15,12 @@ import { cn } from "@/lib/utils";
 
 import { useToast } from "@/hooks/use-toast";
 import { generatePlan } from "@/app/actions";
-import type { TravelPlan, TransportationPlan } from "@/types";
+import type { TravelPlan, TransportationPlan, HotelPlan } from "@/types";
 import { TravelPlanDisplay } from "@/components/travel-plan-display";
 import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
+import { HotelPlanDisplay } from "@/components/hotel-plan-display";
 import { Logo } from "@/components/logo";
-import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon } from "lucide-react";
+import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon, Hotel } from "lucide-react";
 
 const initialState: {
     plan: any;
@@ -130,6 +131,8 @@ export default function Home() {
         return "e.g., 'Trains from Delhi to Mumbai'";
       case "flight_info":
         return "e.g., 'Flights from New York to London'";
+      case "hotel_info":
+        return "e.g., 'Hotels in Goa'";
       case "full_trip":
       default:
         return "e.g., 'a 5-day trip to Kerala'";
@@ -142,6 +145,8 @@ export default function Home() {
         return <Train className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
       case "flight_info":
         return <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+      case "hotel_info":
+        return <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
       case "full_trip":
       default:
         return <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
@@ -163,7 +168,7 @@ export default function Home() {
               Your AI-Powered Travel Assistant
             </h2>
             <p className="text-muted-foreground">
-              Plan your perfect trip, or get specific train and flight details.
+              Plan your perfect trip, or get specific train, flight and hotel details.
             </p>
           </div>
 
@@ -173,7 +178,7 @@ export default function Home() {
                 defaultValue="full_trip"
                 onValueChange={(value) => {
                     setQueryType(value);
-                    if (value === 'full_trip') {
+                    if (value === 'full_trip' || value === 'hotel_info') {
                         setDate(undefined);
                     }
                 }}
@@ -190,6 +195,10 @@ export default function Home() {
                  <Label htmlFor="flight_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
                   <RadioGroupItem value="flight_info" id="flight_info" />
                   Flight Info
+                </Label>
+                <Label htmlFor="hotel_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="hotel_info" id="hotel_info" />
+                  Hotel Info
                 </Label>
               </RadioGroup>
 
@@ -254,6 +263,7 @@ export default function Home() {
             <>
               {state.planType === 'trip' && <TravelPlanDisplay plan={state.plan as TravelPlan} />}
               {state.planType === 'transport' && <TransportationPlanDisplay plan={state.plan as TransportationPlan} />}
+              {state.planType === 'hotel' && <HotelPlanDisplay plan={state.plan as HotelPlan} />}
             </>
           )}
         </div>

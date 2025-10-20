@@ -51,3 +51,15 @@ export type TransportationPlan = {
     trains?: TrainInfo[];
     flights?: FlightInfo[];
 }
+
+export type HotelInfo = {
+    name: string;
+    price: string;
+    rating: number;
+    bookingUrl: string;
+};
+
+export type HotelPlan = {
+    hotels: HotelInfo[];
+    city: string;
+};
