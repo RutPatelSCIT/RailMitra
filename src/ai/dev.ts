@@ -2,3 +2,5 @@
 import './flows/travelPlanner';
 import './flows/transportationFlow';
 import './flows/hotelFlow';
+import './flows/pnrStatusFlow';
+import './flows/trainStatusFlow';

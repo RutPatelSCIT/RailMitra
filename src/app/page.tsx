@@ -15,12 +15,15 @@ import { cn } from "@/lib/utils";
 
 import { useToast } from "@/hooks/use-toast";
 import { generatePlan } from "@/app/actions";
-import type { TravelPlan, TransportationPlan, HotelPlan } from "@/types";
+import type { TravelPlan, TransportationPlan, HotelPlan, PnrStatus, TrainStatus } from "@/types";
 import { TravelPlanDisplay } from "@/components/travel-plan-display";
 import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
 import { HotelPlanDisplay } from "@/components/hotel-plan-display";
+import { PnrStatusDisplay } from "@/components/pnr-status-display";
+import { TrainStatusDisplay } from "@/components/train-status-display";
+
 import { Logo } from "@/components/logo";
-import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon, Hotel } from "lucide-react";
+import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon, Hotel, Ticket, CircleDot } from "lucide-react";
 
 const initialState: {
     plan: any;
@@ -75,7 +78,6 @@ export default function Home() {
         if (event.error === 'aborted') {
           // This is a normal event when the user stops the recording manually.
           // We don't need to show an error message.
-          console.log("Speech recognition aborted by user.");
           return;
         }
         
@@ -133,6 +135,10 @@ export default function Home() {
         return "e.g., 'Flights from New York to London'";
       case "hotel_info":
         return "e.g., 'Hotels in Goa'";
+      case "pnr_status":
+        return "Enter your 10-digit PNR number";
+      case "train_status":
+        return "Enter train number or name";
       case "full_trip":
       default:
         return "e.g., 'a 5-day trip to Kerala'";
@@ -147,6 +153,10 @@ export default function Home() {
         return <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
       case "hotel_info":
         return <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+      case "pnr_status":
+        return <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+      case "train_status":
+        return <CircleDot className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
       case "full_trip":
       default:
         return <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
@@ -178,11 +188,11 @@ export default function Home() {
                 defaultValue="full_trip"
                 onValueChange={(value) => {
                     setQueryType(value);
-                    if (value === 'full_trip' || value === 'hotel_info') {
+                    if (['full_trip', 'hotel_info', 'pnr_status', 'train_status'].includes(value)) {
                         setDate(undefined);
                     }
                 }}
-                className="flex justify-center gap-4"
+                className="flex flex-wrap justify-center gap-2 md:gap-4"
               >
                 <Label htmlFor="full_trip" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
                   <RadioGroupItem value="full_trip" id="full_trip" />
@@ -199,6 +209,14 @@ export default function Home() {
                 <Label htmlFor="hotel_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
                   <RadioGroupItem value="hotel_info" id="hotel_info" />
                   Hotel Info
+                </Label>
+                <Label htmlFor="pnr_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="pnr_status" id="pnr_status" />
+                  PNR Status
+                </Label>
+                <Label htmlFor="train_status" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="train_status" id="train_status" />
+                  Train Status
                 </Label>
               </RadioGroup>
 
@@ -264,6 +282,8 @@ export default function Home() {
               {state.planType === 'trip' && <TravelPlanDisplay plan={state.plan as TravelPlan} />}
               {state.planType === 'transport' && <TransportationPlanDisplay plan={state.plan as TransportationPlan} />}
               {state.planType === 'hotel' && <HotelPlanDisplay plan={state.plan as HotelPlan} />}
+              {state.planType === 'pnr' && <PnrStatusDisplay plan={state.plan as PnrStatus} />}
+              {state.planType === 'train_status' && <TrainStatusDisplay plan={state.plan as TrainStatus} />}
             </>
           )}
         </div>

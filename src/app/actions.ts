@@ -2,6 +2,8 @@
 import { travelPlannerFlow } from '@/ai/flows/travelPlanner';
 import { transportationFlow } from '@/ai/flows/transportationFlow';
 import { hotelFlow } from '@/ai/flows/hotelFlow';
+import { pnrStatusFlow } from '@/ai/flows/pnrStatusFlow';
+import { trainStatusFlow } from '@/ai/flows/trainStatusFlow';
 import { z } from 'zod';
 
 const TravelPlanInputSchema = z.object({
@@ -20,7 +22,18 @@ const HotelInputSchema = z.object({
     queryType: z.literal("hotel_info"),
 });
 
-const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema, HotelInputSchema]);
+const PnrStatusInputSchema = z.object({
+    destination: z.string().min(1, "PNR number cannot be empty."),
+    queryType: z.literal("pnr_status"),
+});
+
+const TrainStatusInputSchema = z.object({
+    destination: z.string().min(1, "Train number cannot be empty."),
+    queryType: z.literal("train_status"),
+});
+
+
+const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema, HotelInputSchema, PnrStatusInputSchema, TrainStatusInputSchema]);
 
 
 export async function generatePlan(prevState: any, formData: FormData): Promise<any> {
@@ -48,6 +61,12 @@ export async function generatePlan(prevState: any, formData: FormData): Promise<
         } else if (validation.data.queryType === 'hotel_info') {
             const results = await hotelFlow({ query: destination });
             return { plan: results, planType: 'hotel' };
+        } else if (validation.data.queryType === 'pnr_status') {
+            const results = await pnrStatusFlow({ pnr: destination });
+            return { plan: results, planType: 'pnr' };
+        } else if (validation.data.queryType === 'train_status') {
+            const results = await trainStatusFlow({ train: destination });
+            return { plan: results, planType: 'train_status' };
         }
         else {
              const { date } = validation.data;

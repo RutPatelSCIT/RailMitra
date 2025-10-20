@@ -63,3 +63,30 @@ export type HotelPlan = {
     hotels: HotelInfo[];
     city: string;
 };
+
+export type PassengerStatus = {
+    passenger: string;
+    bookingStatus: string;
+    currentStatus: string;
+};
+
+export type PnrStatus = {
+    pnrNumber: string;
+    trainName: string;
+    trainNumber: string;
+    departureStation: string;
+    arrivalStation: string;
+    journeyDate: string;
+    passengers: PassengerStatus[];
+};
+
+export type TrainStatus = {
+    trainName: string;
+    trainNumber: string;
+    currentStation: string;
+    lastUpdated: string;
+    status: string;
+    delay: string;
+    nextStation: string;
+    etaNextStation: string;
+};
