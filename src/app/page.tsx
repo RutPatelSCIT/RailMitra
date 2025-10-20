@@ -23,6 +23,7 @@ import { PnrStatusDisplay } from "@/components/pnr-status-display";
 import { TrainStatusDisplay } from "@/components/train-status-display";
 
 import { Logo } from "@/components/logo";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon, Hotel, Ticket, CircleDot } from "lucide-react";
 
 const initialState: {
@@ -168,9 +169,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <header className="p-4 border-b">
-        <div className="container mx-auto flex items-center gap-2">
-          <Logo className="h-8 w-8 text-primary" />
-          <h1 className="text-xl font-bold tracking-tight">RailMitra</h1>
+        <div className="container mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Logo className="h-8 w-8 text-primary" />
+            <h1 className="text-xl font-bold tracking-tight">RailMitra</h1>
+          </div>
+          <ThemeToggle />
         </div>
       </header>
       <main className="container mx-auto p-4 md:p-8">
