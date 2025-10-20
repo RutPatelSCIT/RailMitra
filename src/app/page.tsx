@@ -155,22 +155,23 @@ export default function Home() {
             </p>
           </div>
           
-           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {PlaceHolderImages.map((image) => (
               <Card key={image.id} className="overflow-hidden flex flex-col">
                 <CardContent className="p-0 flex-grow">
-                  <div className="relative aspect-[4/3] h-full">
+                  <div className="relative aspect-[4/3] w-full">
                     <Image 
                       src={image.imageUrl} 
                       alt={image.description} 
                       fill
                       className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 50vw"
                       data-ai-hint={image.imageHint}
                     />
                   </div>
                 </CardContent>
                 <CardFooter className="p-2 justify-center">
-                  <p className="text-xs text-muted-foreground text-center">{image.description}</p>
+                  <p className="text-sm text-muted-foreground text-center">{image.description}</p>
                 </CardFooter>
               </Card>
             ))}
