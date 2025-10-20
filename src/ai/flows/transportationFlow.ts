@@ -12,6 +12,7 @@ const TrainInfoSchema = z.object({
     arrivalTime: z.string().describe("The arrival time."),
     duration: z.string().describe("The total travel duration."),
     price: z.string().describe("The estimated price for a ticket, in INR."),
+    bookingUrl: z.string().url().describe("A Google search URL to find booking options for the train on IRCTC. The URL should be constructed to search for 'IRCTC' and the train number."),
 });
 
 const FlightInfoSchema = z.object({
@@ -23,6 +24,7 @@ const FlightInfoSchema = z.object({
     arrivalTime: z.string().describe("The arrival time."),
     duration: z.string().describe("The total flight duration."),
     price: z.string().describe("The estimated price for a ticket, in INR."),
+    bookingUrl: z.string().url().describe("A Google search URL to find booking options for the flight. The URL should be constructed to search for the airline and flight number."),
 });
 
 const TransportationPlanSchema = z.object({
@@ -46,8 +48,8 @@ const transportationPrompt = ai.definePrompt({
         The user's request is: "{{query}}"{{#if date}} for the date {{date}}{{/if}}.
         The user is asking for: "{{queryType}}".
 
-        - If the user asks for "train_info", provide a list of relevant trains. Do not include flights, hotels, or trip plans. Prices should be in INR.
-        - If the user asks for "flight_info", provide a list of relevant flights. Do not include trains, hotels, or trip plans. Prices should be in INR.
+        - If the user asks for "train_info", provide a list of relevant trains. Do not include flights, hotels, or trip plans. Prices should be in INR. For each train, generate a Google search URL to find booking options on IRCTC. For example, for train number "12952", the URL could be "https://www.google.com/search?q=IRCTC+train+12952".
+        - If the user asks for "flight_info", provide a list of relevant flights. Do not include trains, hotels, or trip plans. Prices should be in INR. For each flight, generate a Google search URL to find booking options. For example, for "IndiGo 6E 204", the URL could be "https://www.google.com/search?q=book+flight+IndiGo+6E+204".
         
         Provide several options if available.
         Present the output in the requested JSON format.

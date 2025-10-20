@@ -34,6 +34,7 @@ export type TrainInfo = {
     arrivalTime: string;
     duration: string;
     price: string;
+    bookingUrl: string;
 }
 
 export type FlightInfo = {
@@ -45,6 +46,7 @@ export type FlightInfo = {
     arrivalTime: string;
     duration: string;
     price: string;
+    bookingUrl: string;
 }
 
 export type TransportationPlan = {
