@@ -4,11 +4,11 @@ import type { TravelPlan } from "@/types";
 import { useRef } from "react";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DollarSign, Hotel, MapPin, Mountain, Star, Download, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { Separator } from "./ui/separator";
 
 type TravelPlanDisplayProps = {
   plan: TravelPlan;
@@ -39,23 +39,23 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
       });
 
       const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
       const canvasWidth = canvas.width;
       const canvasHeight = canvas.height;
       const ratio = canvasWidth / canvasHeight;
-      const height = pdfWidth / ratio;
+      const pdfHeight = pdfWidth / ratio;
 
       let position = 0;
+      let pageHeight = pdf.internal.pageSize.getHeight();
       let remainingHeight = canvasHeight * pdfWidth / canvasWidth;
 
-      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, height);
-      remainingHeight -= pdfHeight;
-
+      pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+      remainingHeight -= pageHeight;
+      
       while (remainingHeight > 0) {
-        position -= pdfHeight;
+        position -= pageHeight;
         pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, height);
-        remainingHeight -= pdfHeight;
+        pdf.addImage(imgData, "PNG", 0, position, pdfWidth, pdfHeight);
+        remainingHeight -= pageHeight;
       }
       
       pdf.save(`${plan.tripTitle.replace(/\s+/g, '-')}.pdf`);
@@ -82,19 +82,17 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
               <span className="font-bold">Estimated Budget:</span> {plan.estimatedBudget}
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <Accordion type="single" collapsible defaultValue="day-1" className="w-full">
-            {plan.itinerary.map((item) => (
-              <AccordionItem value={`day-${item.day}`} key={item.day}>
-                <AccordionTrigger>
-                  <div className="flex items-center gap-4">
-                      <div className="bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold">
-                          {item.day}
-                      </div>
-                      <span className="font-semibold text-lg">Day {item.day}: {item.location}</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent className="pl-4 border-l-2 border-primary ml-8 space-y-4">
+        <CardContent className="space-y-6">
+            {plan.itinerary.map((item, index) => (
+              <div key={item.day}>
+                <div className="flex items-center gap-4 mb-4">
+                    <div className="bg-primary text-primary-foreground rounded-full h-8 w-8 flex items-center justify-center font-bold">
+                        {item.day}
+                    </div>
+                    <span className="font-semibold text-lg">Day {item.day}: {item.location}</span>
+                </div>
+
+                <div className="pl-12 space-y-4">
                   <div className="flex items-start gap-3">
                       <MapPin className="h-5 w-5 mt-1 text-muted-foreground"/>
                       <div>
@@ -127,10 +125,10 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
                             </div>
                       </div>
                   </div>
-                </AccordionContent>
-              </AccordionItem>
+                </div>
+                {index < plan.itinerary.length - 1 && <Separator className="mt-6" />}
+              </div>
             ))}
-          </Accordion>
         </CardContent>
       </Card>
     </div>
