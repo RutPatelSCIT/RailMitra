@@ -25,7 +25,7 @@ export function HotelPlanDisplay({ plan }: HotelPlanDisplayProps) {
   }
 
   return (
-    <Card>
+    <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700/10 via-background to-background">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Hotel className="h-6 w-6 text-primary" />
@@ -47,7 +47,7 @@ export function HotelPlanDisplay({ plan }: HotelPlanDisplayProps) {
                   <div>
                     <Button asChild variant="link" className="p-0 h-auto">
                         <a href={hotel.bookingUrl} target="_blank" rel="noopener noreferrer">
-                            Book on Goibibo <ExternalLink className="ml-1 h-3 w-3" />
+                            Find Booking Options <ExternalLink className="ml-1 h-3 w-3" />
                         </a>
                     </Button>
                   </div>
