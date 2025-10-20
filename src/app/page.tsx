@@ -17,7 +17,7 @@ import { TransportationPlanDisplay } from "@/components/transportation-plan-disp
 import { Logo } from "@/components/logo";
 import { Loader2, Plane, Train, Briefcase, Mic, MicOff } from "lucide-react";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 
 const initialState = {
   plan: null,
@@ -157,16 +157,21 @@ export default function Home() {
           
            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {PlaceHolderImages.map((image) => (
-              <Card key={image.id} className="overflow-hidden">
-                <div className="relative aspect-[4/3]">
-                  <Image 
-                    src={image.imageUrl} 
-                    alt={image.description} 
-                    fill
-                    className="object-cover"
-                    data-ai-hint={image.imageHint}
-                  />
-                </div>
+              <Card key={image.id} className="overflow-hidden flex flex-col">
+                <CardContent className="p-0 flex-grow">
+                  <div className="relative aspect-[4/3] h-full">
+                    <Image 
+                      src={image.imageUrl} 
+                      alt={image.description} 
+                      fill
+                      className="object-contain"
+                      data-ai-hint={image.imageHint}
+                    />
+                  </div>
+                </CardContent>
+                <CardFooter className="p-2 justify-center">
+                  <p className="text-xs text-muted-foreground text-center">{image.description}</p>
+                </CardFooter>
               </Card>
             ))}
           </div>
