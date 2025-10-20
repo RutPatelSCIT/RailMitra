@@ -224,7 +224,7 @@ export default function Home() {
                         </PopoverContent>
                     </Popover>
                  )}
-                <input type="hidden" name="date" value={date?.toISOString()} />
+                <input type="hidden" name="date" value={date?.toISOString() || ''} />
                 <SubmitButton />
             </div>
           </form>
