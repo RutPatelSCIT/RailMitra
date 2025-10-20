@@ -24,3 +24,30 @@ export type TravelPlan = {
   itinerary: DailyPlan[];
   estimatedBudget: string;
 };
+
+export type TrainInfo = {
+    name: string;
+    number: string;
+    departureStation: string;
+    departureTime: string;
+    arrivalStation: string;
+    arrivalTime: string;
+    duration: string;
+    price: string;
+}
+
+export type FlightInfo = {
+    airline: string;
+    flightNumber: string;
+    departureAirport: string;
+    departureTime: string;
+    arrivalAirport: string;
+    arrivalTime: string;
+    duration: string;
+    price: string;
+}
+
+export type TransportationPlan = {
+    trains?: TrainInfo[];
+    flights?: FlightInfo[];
+}

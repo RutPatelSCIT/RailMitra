@@ -1,58 +1,71 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import { useFormState, useFormStatus } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+
 import { useToast } from "@/hooks/use-toast";
 import { generatePlan } from "@/app/actions";
-import type { TravelPlan } from "@/types";
+import type { TravelPlan, TransportationPlan } from "@/types";
 import { TravelPlanDisplay } from "@/components/travel-plan-display";
+import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
 import { Logo } from "@/components/logo";
-import { Loader2, Plane } from "lucide-react";
+import { Loader2, Plane, Train, Briefcase } from "lucide-react";
 
-const FormSchema = z.object({
-  destination: z.string().min(3, {
-    message: "Destination must be at least 3 characters.",
-  }),
-});
+const initialState = {
+  plan: null,
+  planType: null,
+  error: null,
+};
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending} className="w-32">
+      {pending ? <Loader2 className="animate-spin" /> : "Generate"}
+    </Button>
+  );
+}
 
 export default function Home() {
-  const [plan, setPlan] = useState<TravelPlan | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [queryType, setQueryType] = useState("full_trip");
+  const [state, formAction] = useFormState(generatePlan, initialState);
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      destination: "",
-    },
-  });
+  if (state.error) {
+    toast({
+      variant: "destructive",
+      title: "An error occurred",
+      description: state.error,
+    });
+    state.error = null;
+  }
 
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    setIsLoading(true);
-    setPlan(null);
-    try {
-      const travelPlan = await generatePlan(data.destination);
-      setPlan(travelPlan);
-      if (!travelPlan) {
-          toast({
-          title: "Could not generate a plan",
-          description: "There was an issue generating your travel plan. Please try again.",
-        });
-      }
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "An error occurred",
-        description: error instanceof Error ? error.message : "Something went wrong.",
-      });
-    } finally {
-      setIsLoading(false);
+  const getPlaceholder = () => {
+    switch (queryType) {
+      case "train_info":
+        return "e.g., 'Trains from Delhi to Mumbai'";
+      case "flight_info":
+        return "e.g., 'Flights from New York to London'";
+      case "full_trip":
+      default:
+        return "e.g., 'a 5-day trip to Kerala'";
+    }
+  };
+  
+  const getIcon = () => {
+     switch (queryType) {
+      case "train_info":
+        return <Train className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+      case "flight_info":
+        return <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+      case "full_trip":
+      default:
+        return <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
     }
   }
 
@@ -68,45 +81,55 @@ export default function Home() {
         <div className="max-w-3xl mx-auto flex flex-col gap-8">
           <div className="text-center space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
-              Your AI-Powered Travel Planner
+              Your AI-Powered Travel Assistant
             </h2>
             <p className="text-muted-foreground">
-              Enter your dream destination and let us craft the perfect itinerary for you.
+              Plan your perfect trip, or get specific train and flight details.
             </p>
           </div>
 
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-start gap-2">
-              <FormField
-                control={form.control}
-                name="destination"
-                render={({ field }) => (
-                  <FormItem className="flex-grow">
-                    <FormControl>
-                      <div className="relative">
-                        <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input placeholder="e.g., 'a 5-day trip to Kerala'" className="pl-10" {...field} />
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit" disabled={isLoading} className="w-32">
-                {isLoading ? <Loader2 className="animate-spin" /> : "Plan Trip"}
-              </Button>
-            </form>
-          </Form>
+          <form action={formAction} className="space-y-4">
+             <RadioGroup
+                name="queryType"
+                defaultValue="full_trip"
+                onValueChange={setQueryType}
+                className="flex justify-center gap-4"
+              >
+                <Label htmlFor="full_trip" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="full_trip" id="full_trip" />
+                  Full Trip
+                </Label>
+                <Label htmlFor="train_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="train_info" id="train_info" />
+                  Train Info
+                </Label>
+                 <Label htmlFor="flight_info" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
+                  <RadioGroupItem value="flight_info" id="flight_info" />
+                  Flight Info
+                </Label>
+              </RadioGroup>
 
-          {isLoading && (
+            <div className="flex items-start gap-2">
+                <div className="relative flex-grow">
+                    {getIcon()}
+                    <Input name="destination" placeholder={getPlaceholder()} className="pl-10" required />
+                </div>
+                <SubmitButton />
+            </div>
+          </form>
+
+          {useFormStatus().pending && (
             <div className="flex justify-center items-center flex-col gap-4 text-center pt-8">
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-muted-foreground">Crafting your itinerary... this might take a moment.</p>
+              <p className="text-muted-foreground">Crafting your response... this might take a moment.</p>
             </div>
           )}
           
-          {!isLoading && plan && (
-            <TravelPlanDisplay plan={plan} />
+          {!useFormStatus().pending && state.plan && (
+            <>
+              {state.planType === 'trip' && <TravelPlanDisplay plan={state.plan as TravelPlan} />}
+              {state.planType === 'transport' && <TransportationPlanDisplay plan={state.plan as TransportationPlan} />}
+            </>
           )}
         </div>
       </main>
