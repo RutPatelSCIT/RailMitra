@@ -148,18 +148,18 @@ export default function Home() {
   const getIcon = () => {
      switch (queryType) {
       case "train_info":
-        return <Train className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <Train className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
       case "flight_info":
-        return <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <Plane className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
       case "hotel_info":
-        return <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <Hotel className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
       case "pnr_status":
-        return <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <Ticket className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
       case "train_status":
-        return <CircleDot className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <CircleDot className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
       case "full_trip":
       default:
-        return <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />;
+        return <Briefcase className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />;
     }
   }
 
@@ -261,7 +261,7 @@ export default function Home() {
                     <Input 
                         name="destination" 
                         placeholder={getPlaceholder()} 
-                        className="pl-10 pr-10" 
+                        className="pl-12 pr-10" 
                         required
                         value={destination}
                         onChange={(e) => setDestination(e.target.value)}

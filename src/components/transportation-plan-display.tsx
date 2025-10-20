@@ -38,7 +38,7 @@ export function TransportationPlanDisplay({ plan }: TransportationPlanDisplayPro
   return (
     <div className="space-y-4">
       {plan.trains && plan.trains.length > 0 && (
-          <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700/10 via-background to-background">
+          <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Train className="h-6 w-6 text-primary" />
@@ -71,10 +71,10 @@ export function TransportationPlanDisplay({ plan }: TransportationPlanDisplayPro
       )}
 
        {plan.flights && plan.flights.length > 0 && (
-          <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700/10 via-background to-background">
+          <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-accent/10 via-background to-background">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Plane className="h-6 w-6 text-primary" />
+                <Plane className="h-6 w-6 text-accent" />
                 Flight Information
               </CardTitle>
             </CardHeader>

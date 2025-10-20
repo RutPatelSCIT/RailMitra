@@ -25,7 +25,7 @@ export function HotelPlanDisplay({ plan }: HotelPlanDisplayProps) {
   }
 
   return (
-    <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700/10 via-background to-background">
+    <Card className="bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-primary/10 via-background to-background">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Hotel className="h-6 w-6 text-primary" />
