@@ -4,10 +4,19 @@ import type { TransportationPlan } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Plane, Train } from "lucide-react";
 import { Separator } from "./ui/separator";
+import { format } from "date-fns";
 
 type TransportationPlanDisplayProps = {
   plan: TransportationPlan;
 };
+
+const formatTime = (timeString: string) => {
+    try {
+        return format(new Date(timeString), 'p');
+    } catch (e) {
+        return timeString;
+    }
+}
 
 export function TransportationPlanDisplay({ plan }: TransportationPlanDisplayProps) {
   if (!plan || (!plan.trains && !plan.flights)) {
@@ -38,8 +47,8 @@ export function TransportationPlanDisplay({ plan }: TransportationPlanDisplayPro
                 <div key={index}>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                         <div className="font-semibold">Train:</div><div>{train.name} ({train.number})</div>
-                        <div className="font-semibold">Departure:</div><div>{train.departureStation} at {train.departureTime}</div>
-                        <div className="font-semibold">Arrival:</div><div>{train.arrivalStation} at {train.arrivalTime}</div>
+                        <div className="font-semibold">Departure:</div><div>{train.departureStation} at {formatTime(train.departureTime)}</div>
+                        <div className="font-semibold">Arrival:</div><div>{train.arrivalStation} at {formatTime(train.arrivalTime)}</div>
                         <div className="font-semibold">Duration:</div><div>{train.duration}</div>
                         <div className="font-semibold">Est. Price:</div><div>{train.price}</div>
                     </div>
@@ -63,8 +72,8 @@ export function TransportationPlanDisplay({ plan }: TransportationPlanDisplayPro
                 <div key={index}>
                     <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
                         <div className="font-semibold">Airline:</div><div>{flight.airline} ({flight.flightNumber})</div>
-                        <div className="font-semibold">Departure:</div><div>{flight.departureAirport} at {flight.departureTime}</div>
-                        <div className="font-semibold">Arrival:</div><div>{flight.arrivalAirport} at {flight.arrivalTime}</div>
+                        <div className="font-semibold">Departure:</div><div>{flight.departureAirport} at {formatTime(flight.departureTime)}</div>
+                        <div className="font-semibold">Arrival:</div><div>{flight.arrivalAirport} at {formatTime(flight.arrivalTime)}</div>
                         <div className="font-semibold">Duration:</div><div>{flight.duration}</div>
                         <div className="font-semibold">Est. Price:</div><div>{flight.price}</div>
                     </div>
