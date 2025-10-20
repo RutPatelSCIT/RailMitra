@@ -42,7 +42,7 @@ export async function generatePlan(prevState: any, formData: FormData): Promise<
         } else {
              const { date } = validation.data;
              const results = await transportationFlow({ query: destination, queryType, date });
-             return { plan: results, planType: 'transport' };
+             return { plan: results, planType: 'transport', date: date };
         }
     } catch (error) {
         console.error('Error running flow:', error);

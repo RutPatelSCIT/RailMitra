@@ -21,10 +21,16 @@ import { TransportationPlanDisplay } from "@/components/transportation-plan-disp
 import { Logo } from "@/components/logo";
 import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon } from "lucide-react";
 
-const initialState = {
+const initialState: {
+    plan: any;
+    planType: string | null;
+    error: string | null;
+    date?: string;
+} = {
   plan: null,
   planType: null,
   error: null,
+  date: undefined,
 };
 
 function SubmitButton() {
@@ -37,13 +43,16 @@ function SubmitButton() {
 }
 
 export default function Home() {
+  const [state, formAction] = useActionState(generatePlan, initialState);
+  
   const [queryType, setQueryType] = useState("full_trip");
   const [destination, setDestination] = useState("");
-  const [date, setDate] = useState<Date | undefined>();
+  const [date, setDate] = useState<Date | undefined>(
+    state.date ? new Date(state.date) : undefined
+  );
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
-
-  const [state, formAction] = useActionState(generatePlan, initialState);
+  
   const { toast } = useToast();
   
   useEffect(() => {
@@ -162,7 +171,12 @@ export default function Home() {
              <RadioGroup
                 name="queryType"
                 defaultValue="full_trip"
-                onValueChange={setQueryType}
+                onValueChange={(value) => {
+                    setQueryType(value);
+                    if (value === 'full_trip') {
+                        setDate(undefined);
+                    }
+                }}
                 className="flex justify-center gap-4"
               >
                 <Label htmlFor="full_trip" className="flex items-center gap-2 cursor-pointer rounded-md border p-2 has-[input:checked]:border-primary">
