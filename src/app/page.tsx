@@ -56,6 +56,13 @@ export default function Home() {
       };
 
       recognition.onerror = (event: any) => {
+        if (event.error === 'aborted') {
+          // This is a normal event when the user stops the recording manually.
+          // We don't need to show an error message.
+          console.log("Speech recognition aborted by user.");
+          return;
+        }
+        
         console.error("Speech recognition error", event.error);
         toast({
             variant: "destructive",
