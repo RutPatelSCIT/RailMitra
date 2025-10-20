@@ -11,7 +11,7 @@ const TrainInfoSchema = z.object({
     arrivalStation: z.string().describe("The arrival station name and code."),
     arrivalTime: z.string().describe("The arrival time."),
     duration: z.string().describe("The total travel duration."),
-    price: z.string().describe("The estimated price for a ticket, including currency."),
+    price: z.string().describe("The estimated price for a ticket, in INR."),
 });
 
 const FlightInfoSchema = z.object({
@@ -22,7 +22,7 @@ const FlightInfoSchema = z.object({
     arrivalAirport: z.string().describe("The arrival airport name and IATA code."),
     arrivalTime: z.string().describe("The arrival time."),
     duration: z.string().describe("The total flight duration."),
-    price: z.string().describe("The estimated price for a ticket, including currency."),
+    price: z.string().describe("The estimated price for a ticket, in INR."),
 });
 
 const TransportationPlanSchema = z.object({
@@ -46,8 +46,8 @@ const transportationPrompt = ai.definePrompt({
         The user's request is: "{{query}}"{{#if date}} for the date {{date}}{{/if}}.
         The user is asking for: "{{queryType}}".
 
-        - If the user asks for "train_info", provide a list of relevant trains. Do not include flights, hotels, or trip plans.
-        - If the user asks for "flight_info", provide a list of relevant flights. Do not include trains, hotels, or trip plans.
+        - If the user asks for "train_info", provide a list of relevant trains. Do not include flights, hotels, or trip plans. Prices should be in INR.
+        - If the user asks for "flight_info", provide a list of relevant flights. Do not include trains, hotels, or trip plans. Prices should be in INR.
         
         Provide several options if available.
         Present the output in the requested JSON format.

@@ -5,7 +5,7 @@ import { ai } from '../genkit';
 
 const HotelSchema = z.object({
   name: z.string().describe("The name of the hotel."),
-  price: z.string().describe("The estimated price per night, including currency."),
+  price: z.string().describe("The estimated price per night, in INR."),
   rating: z.number().describe("The hotel's rating, out of 5."),
 });
 
@@ -13,7 +13,7 @@ const TrainSchema = z.object({
     name: z.string().describe("The name or number of the train."),
     departure: z.string().describe("The departure station and time."),
     arrival: z.string().describe("The arrival station and time."),
-    price: z.string().describe("The estimated price for the train ticket, including currency."),
+    price: z.string().describe("The estimated price for the train ticket, in INR."),
 });
 
 const DailyPlanSchema = z.object({
@@ -27,7 +27,7 @@ const DailyPlanSchema = z.object({
 const TravelPlanSchema = z.object({
   tripTitle: z.string().describe("A creative and descriptive title for the travel plan."),
   itinerary: z.array(DailyPlanSchema).describe("The day-by-day itinerary for the trip."),
-  estimatedBudget: z.string().describe("The total estimated budget for the entire trip, including a currency symbol."),
+  estimatedBudget: z.string().describe("The total estimated budget for the entire trip, in INR."),
 });
 
 const travelPlannerPrompt = ai.definePrompt({
@@ -39,8 +39,8 @@ const travelPlannerPrompt = ai.definePrompt({
         The user's request is: "{{query}}".
         
         Generate a comprehensive travel plan that includes:
-        1. A day-by-day plan with locations, activities (including scenic places), a list of hotel suggestions with estimated prices and ratings, and train options for travel between locations.
-        2. A total estimated budget for the trip.
+        1. A day-by-day plan with locations, activities (including scenic places), a list of hotel suggestions with estimated prices and ratings, and train options for travel between locations. All prices and budgets must be in Indian Rupees (INR).
+        2. A total estimated budget for the trip in INR.
         
         The plan should be well-structured, practical, and inspiring. Present the output in the requested JSON format.
     `,
