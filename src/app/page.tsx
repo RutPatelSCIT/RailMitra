@@ -2,6 +2,7 @@
 
 import { useState, useActionState, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import Image from "next/image";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,8 @@ import { TravelPlanDisplay } from "@/components/travel-plan-display";
 import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
 import { Logo } from "@/components/logo";
 import { Loader2, Plane, Train, Briefcase, Mic, MicOff } from "lucide-react";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
+import { Card } from "@/components/ui/card";
 
 const initialState = {
   plan: null,
@@ -142,7 +145,7 @@ export default function Home() {
         </div>
       </header>
       <main className="container mx-auto p-4 md:p-8">
-        <div className="max-w-3xl mx-auto flex flex-col gap-8">
+        <div className="max-w-4xl mx-auto flex flex-col gap-8">
           <div className="text-center space-y-2">
             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">
               Your AI-Powered Travel Assistant
@@ -151,8 +154,24 @@ export default function Home() {
               Plan your perfect trip, or get specific train and flight details.
             </p>
           </div>
+          
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {PlaceHolderImages.map((image) => (
+              <Card key={image.id} className="overflow-hidden">
+                <div className="relative aspect-[4/3]">
+                  <Image 
+                    src={image.imageUrl} 
+                    alt={image.description} 
+                    fill
+                    className="object-cover"
+                    data-ai-hint={image.imageHint}
+                  />
+                </div>
+              </Card>
+            ))}
+          </div>
 
-          <form action={formAction} className="space-y-4">
+          <form action={formAction} className="space-y-4 pt-8">
              <RadioGroup
                 name="queryType"
                 defaultValue="full_trip"
