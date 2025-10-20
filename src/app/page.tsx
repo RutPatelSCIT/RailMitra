@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useState, useActionState } from "react";
+import { useFormStatus } from "react-dom";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,7 @@ function SubmitButton() {
 
 export default function Home() {
   const [queryType, setQueryType] = useState("full_trip");
-  const [state, formAction] = useFormState(generatePlan, initialState);
+  const [state, formAction] = useActionState(generatePlan, initialState);
   const { toast } = useToast();
 
   if (state.error) {
