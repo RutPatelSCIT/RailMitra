@@ -4,11 +4,19 @@ export type Hotel = {
     rating: number;
 };
 
+export type Train = {
+    name: string;
+    departure: string;
+    arrival: string;
+    price: string;
+};
+
 export type DailyPlan = {
   day: number;
   location: string;
   activities: string;
   hotels: Hotel[];
+  trains?: Train[];
 };
 
 export type TravelPlan = {

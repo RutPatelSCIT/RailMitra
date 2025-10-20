@@ -6,7 +6,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Hotel, MapPin, Mountain, Star, Download, Loader2 } from "lucide-react";
+import { DollarSign, Hotel, MapPin, Mountain, Star, Download, Loader2, Train } from "lucide-react";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
 
@@ -125,6 +125,24 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
                             </div>
                       </div>
                   </div>
+                  {item.trains && item.trains.length > 0 && (
+                    <div className="flex items-start gap-3">
+                        <Train className="h-5 w-5 mt-1 text-muted-foreground"/>
+                        <div>
+                            <h4 className="font-semibold">Train Options</h4>
+                            <div className="text-muted-foreground space-y-2 pt-1">
+                                  {item.trains.map((train) => (
+                                      <div key={train.name} className="flex flex-col p-2 border rounded-md">
+                                          <span className="font-medium text-foreground">{train.name}</span>
+                                          <span>Departure: {train.departure}</span>
+                                          <span>Arrival: {train.arrival}</span>
+                                          <span>Price: {train.price}</span>
+                                      </div>
+                                  ))}
+                              </div>
+                        </div>
+                    </div>
+                  )}
                 </div>
                 {index < plan.itinerary.length - 1 && <Separator className="mt-6" />}
               </div>
