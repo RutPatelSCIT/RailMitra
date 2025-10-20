@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useActionState } from "react";
+import { useState, useActionState, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
 
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,7 @@ import type { TravelPlan, TransportationPlan } from "@/types";
 import { TravelPlanDisplay } from "@/components/travel-plan-display";
 import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
 import { Logo } from "@/components/logo";
-import { Loader2, Plane, Train, Briefcase } from "lucide-react";
+import { Loader2, Plane, Train, Briefcase, Mic, MicOff } from "lucide-react";
 
 const initialState = {
   plan: null,
@@ -33,8 +33,65 @@ function SubmitButton() {
 
 export default function Home() {
   const [queryType, setQueryType] = useState("full_trip");
+  const [destination, setDestination] = useState("");
+  const [isRecording, setIsRecording] = useState(false);
+  const recognitionRef = useRef<any>(null);
+
   const [state, formAction] = useActionState(generatePlan, initialState);
   const { toast } = useToast();
+  
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      recognitionRef.current = new SpeechRecognition();
+      const recognition = recognitionRef.current;
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event: any) => {
+        const transcript = event.results[0][0].transcript;
+        setDestination(transcript);
+        setIsRecording(false);
+      };
+
+      recognition.onerror = (event: any) => {
+        console.error("Speech recognition error", event.error);
+        toast({
+            variant: "destructive",
+            title: "Voice Error",
+            description: `Could not recognize speech: ${event.error}`,
+        });
+        setIsRecording(false);
+      };
+      
+      recognition.onend = () => {
+         if (isRecording) {
+            setIsRecording(false);
+         }
+      }
+    }
+  }, [toast, isRecording]);
+
+  const handleMicClick = () => {
+    if (!recognitionRef.current) {
+        toast({
+            variant: "destructive",
+            title: "Not Supported",
+            description: "Your browser does not support voice recognition.",
+        });
+      return;
+    }
+
+    if (isRecording) {
+      recognitionRef.current.stop();
+      setIsRecording(false);
+    } else {
+      recognitionRef.current.start();
+      setIsRecording(true);
+    }
+  };
+
 
   if (state.error) {
     toast({
@@ -112,7 +169,23 @@ export default function Home() {
             <div className="flex items-start gap-2">
                 <div className="relative flex-grow">
                     {getIcon()}
-                    <Input name="destination" placeholder={getPlaceholder()} className="pl-10" required />
+                    <Input 
+                        name="destination" 
+                        placeholder={getPlaceholder()} 
+                        className="pl-10 pr-10" 
+                        required
+                        value={destination}
+                        onChange={(e) => setDestination(e.target.value)}
+                    />
+                    <Button 
+                        type="button" 
+                        size="icon" 
+                        variant="ghost" 
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-8 w-8"
+                        onClick={handleMicClick}
+                    >
+                        {isRecording ? <MicOff className="h-4 w-4 text-red-500" /> : <Mic className="h-4 w-4 text-muted-foreground" />}
+                    </Button>
                 </div>
                 <SubmitButton />
             </div>
