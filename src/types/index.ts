@@ -1,6 +1,12 @@
-export type SerpResult = {
-  title: string;
-  url: string;
-  description: string;
-  type?: string;
+export type DailyPlan = {
+  day: number;
+  location: string;
+  activities: string;
+  hotel: string;
+};
+
+export type TravelPlan = {
+  tripTitle: string;
+  itinerary: DailyPlan[];
+  estimatedBudget: string;
 };

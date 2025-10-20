@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'SerpScraper',
-  description: 'Extract data from search engine results.',
+  title: 'RailMitra',
+  description: 'Your AI-powered travel planner.',
 };
 
 export default function RootLayout({
