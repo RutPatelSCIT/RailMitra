@@ -155,7 +155,7 @@ export default function Home() {
             </p>
           </div>
           
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {PlaceHolderImages.map((image) => (
               <Card key={image.id} className="overflow-hidden flex flex-col">
                 <CardContent className="p-0 flex-grow">
@@ -164,8 +164,8 @@ export default function Home() {
                       src={image.imageUrl} 
                       alt={image.description} 
                       fill
-                      className="object-contain"
-                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-cover"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1024px) 25vw, 20vw"
                       data-ai-hint={image.imageHint}
                     />
                   </div>

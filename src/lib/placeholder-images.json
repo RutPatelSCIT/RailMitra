@@ -1,10 +1,10 @@
 {
   "placeholderImages": [
     {
-      "id": "taj-mahal",
-      "description": "The Taj Mahal in Agra",
-      "imageUrl": "https://images.unsplash.com/photo-1578909516849-bced8d0ef3e0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxUYWolMjBNYWhhbHxlbnwwfHx8fDE3NjA5NjQ1MDZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "Taj Mahal"
+      "id": "meenakshi-temple",
+      "description": "Meenakshi Temple in Madurai",
+      "imageUrl": "https://images.unsplash.com/photo-1596176532569-b6cb57182b20?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxfHxNZWVuYWtzaGklMjBUZW1wbGV8ZW58MHx8fHwxNzYxMDQ5MjYxfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "Meenakshi Temple"
     },
     {
       "id": "himalayas",
