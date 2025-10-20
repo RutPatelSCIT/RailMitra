@@ -112,8 +112,8 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
                       <div>
                           <h4 className="font-semibold">Hotel Suggestions</h4>
                            <div className="text-muted-foreground space-y-2 pt-1">
-                                {item.hotels.map((hotel) => (
-                                    <div key={hotel.name} className="flex flex-col p-2 border rounded-md">
+                                {item.hotels.map((hotel, hotelIndex) => (
+                                    <div key={`${hotel.name}-${hotelIndex}`} className="flex flex-col p-2 border rounded-md">
                                         <span className="font-medium text-foreground">{hotel.name}</span>
                                         <span>Price: {hotel.price}</span>
                                         <div className="flex items-center">
@@ -131,8 +131,8 @@ export function TravelPlanDisplay({ plan }: TravelPlanDisplayProps) {
                         <div>
                             <h4 className="font-semibold">Train Options</h4>
                             <div className="text-muted-foreground space-y-2 pt-1">
-                                  {item.trains.map((train) => (
-                                      <div key={train.name} className="flex flex-col p-2 border rounded-md">
+                                  {item.trains.map((train, trainIndex) => (
+                                      <div key={`${train.name}-${trainIndex}`} className="flex flex-col p-2 border rounded-md">
                                           <span className="font-medium text-foreground">{train.name}</span>
                                           <span>Departure: {train.departure}</span>
                                           <span>Arrival: {train.arrival}</span>
