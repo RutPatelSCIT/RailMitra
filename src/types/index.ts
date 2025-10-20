@@ -1,8 +1,14 @@
+export type Hotel = {
+    name: string;
+    price: string;
+    rating: number;
+};
+
 export type DailyPlan = {
   day: number;
   location: string;
   activities: string;
-  hotel: string;
+  hotels: Hotel[];
 };
 
 export type TravelPlan = {

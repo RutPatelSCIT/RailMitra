@@ -3,11 +3,17 @@
 import { z } from 'zod';
 import { ai } from '../genkit';
 
+const HotelSchema = z.object({
+  name: z.string().describe("The name of the hotel."),
+  price: z.string().describe("The estimated price per night, including currency."),
+  rating: z.number().describe("The hotel's rating, out of 5."),
+});
+
 const DailyPlanSchema = z.object({
   day: z.number().describe("The day number of the itinerary, e.g., 1, 2, 3."),
   location: z.string().describe("The primary city or area for the day's activities."),
   activities: z.string().describe("A detailed description of the day's activities, including scenic places, things to do, and suggested times."),
-  hotel: z.string().describe("A suggestion for a hotel or type of accommodation for the night."),
+  hotels: z.array(HotelSchema).describe("A list of suggestions for hotels for the night, including price and rating."),
 });
 
 const TravelPlanSchema = z.object({
@@ -25,7 +31,7 @@ const travelPlannerPrompt = ai.definePrompt({
         The user's request is: "{{query}}".
         
         Generate a comprehensive travel plan that includes:
-        1. A day-by-day plan with locations, activities (including scenic places), and hotel suggestions.
+        1. A day-by-day plan with locations, activities (including scenic places), and a list of hotel suggestions with estimated prices and ratings.
         2. A total estimated budget for the trip.
         
         The plan should be well-structured, practical, and inspiring. Present the output in the requested JSON format.
