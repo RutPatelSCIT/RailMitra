@@ -11,6 +11,7 @@ const TravelPlanInputSchema = z.object({
 const TransportationInputSchema = z.object({
     destination: z.string().min(1, "Query cannot be empty."),
     queryType: z.enum(["train_info", "flight_info"]),
+    date: z.string().optional(),
 });
 
 const InputSchema = z.union([TravelPlanInputSchema, TransportationInputSchema]);
@@ -20,6 +21,7 @@ export async function generatePlan(prevState: any, formData: FormData): Promise<
     const rawData = {
         destination: formData.get('destination'),
         queryType: formData.get('queryType'),
+        date: formData.get('date'),
     };
     
     const validation = InputSchema.safeParse(rawData);
@@ -34,11 +36,12 @@ export async function generatePlan(prevState: any, formData: FormData): Promise<
     const { destination, queryType } = validation.data;
 
     try {
-        if (queryType === 'full_trip') {
+        if (validation.data.queryType === 'full_trip') {
             const results = await travelPlannerFlow({ query: destination });
             return { plan: results, planType: 'trip' };
         } else {
-             const results = await transportationFlow({ query: destination, queryType });
+             const { date } = validation.data;
+             const results = await transportationFlow({ query: destination, queryType, date });
              return { plan: results, planType: 'transport' };
         }
     } catch (error) {

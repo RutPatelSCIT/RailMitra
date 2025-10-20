@@ -2,11 +2,16 @@
 
 import { useState, useActionState, useRef, useEffect } from "react";
 import { useFormStatus } from "react-dom";
+import { format } from "date-fns";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+
 
 import { useToast } from "@/hooks/use-toast";
 import { generatePlan } from "@/app/actions";
@@ -14,7 +19,7 @@ import type { TravelPlan, TransportationPlan } from "@/types";
 import { TravelPlanDisplay } from "@/components/travel-plan-display";
 import { TransportationPlanDisplay } from "@/components/transportation-plan-display";
 import { Logo } from "@/components/logo";
-import { Loader2, Plane, Train, Briefcase, Mic, MicOff } from "lucide-react";
+import { Loader2, Plane, Train, Briefcase, Mic, MicOff, CalendarIcon } from "lucide-react";
 
 const initialState = {
   plan: null,
@@ -34,6 +39,7 @@ function SubmitButton() {
 export default function Home() {
   const [queryType, setQueryType] = useState("full_trip");
   const [destination, setDestination] = useState("");
+  const [date, setDate] = useState<Date | undefined>();
   const [isRecording, setIsRecording] = useState(false);
   const recognitionRef = useRef<any>(null);
 
@@ -194,6 +200,31 @@ export default function Home() {
                         {isRecording ? <MicOff className="h-4 w-4 text-red-500" /> : <Mic className="h-4 w-4 text-muted-foreground" />}
                     </Button>
                 </div>
+                 { (queryType === 'train_info' || queryType === 'flight_info') && (
+                     <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                            variant={"outline"}
+                            className={cn(
+                                "w-[240px] justify-start text-left font-normal",
+                                !date && "text-muted-foreground"
+                            )}
+                            >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {date ? format(date, "PPP") : <span>Pick a date</span>}
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                            mode="single"
+                            selected={date}
+                            onSelect={setDate}
+                            initialFocus
+                            />
+                        </PopoverContent>
+                    </Popover>
+                 )}
+                <input type="hidden" name="date" value={date?.toISOString()} />
                 <SubmitButton />
             </div>
           </form>

@@ -30,14 +30,20 @@ const TransportationPlanSchema = z.object({
   flights: z.array(FlightInfoSchema).describe("A list of available flights for the requested route.").optional(),
 });
 
+const TransportationFlowInputSchema = z.object({ 
+    query: z.string(), 
+    queryType: z.enum(["train_info", "flight_info"]),
+    date: z.string().optional(),
+});
+
 const transportationPrompt = ai.definePrompt({
     name: 'transportationPrompt',
-    input: { schema: z.object({ query: z.string(), queryType: z.enum(["train_info", "flight_info"]) }) },
+    input: { schema: TransportationFlowInputSchema },
     output: { schema: TransportationPlanSchema },
     prompt: `
         You are an expert travel agent named "RailMitra". Your task is to provide information about trains or flights based on the user's request.
         
-        The user's request is: "{{query}}".
+        The user's request is: "{{query}}"{{#if date}} for the date {{date}}{{/if}}.
         The user is asking for: "{{queryType}}".
 
         - If the user asks for "train_info", provide a list of relevant trains. Do not include flights, hotels, or trip plans.
@@ -51,11 +57,11 @@ const transportationPrompt = ai.definePrompt({
 export const transportationFlow = ai.defineFlow(
   {
     name: 'transportationFlow',
-    inputSchema: z.object({ query: z.string(), queryType: z.enum(["train_info", "flight_info"]) }),
+    inputSchema: TransportationFlowInputSchema,
     outputSchema: TransportationPlanSchema,
   },
-  async ({ query, queryType }) => {
-    const response = await transportationPrompt({ query, queryType });
+  async (input) => {
+    const response = await transportationPrompt(input);
     return response.output!;
   }
 );
