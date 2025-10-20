@@ -31,7 +31,9 @@ const extractionPrompt = ai.definePrompt({
         You are an expert data extractor. Your task is to extract structured data from Search Engine Result Page (SERP) content.
         The user performed the query: "{{query}}".
         
-        Analyze the following SERP results and extract the title, URL, and description for each result. The description should come from the snippet.
+        Analyze the following SERP results and extract the title, URL, and a detailed description for each result. 
+        The description should be comprehensive, summarizing all available information from the snippet. 
+        If the query is for travel websites like MakeMyTrip or Agoda, ensure the description includes details like deals, offers, or booking information if present in the snippet.
         
         SERP Results (JSON):
         {{{serpResults}}}
