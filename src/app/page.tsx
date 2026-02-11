@@ -172,7 +172,7 @@ export default function Home() {
         <div className="container mx-auto flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Logo className="h-8 w-8 text-primary" />
-            <h1 className="text-xl font-bold tracking-tight">RailMitra</h1>
+            <h1 className="text-xl font-bold tracking-tight">Chaloyaar</h1>
           </div>
           <ThemeToggle />
         </div>
